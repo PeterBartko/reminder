@@ -1,0 +1,86 @@
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.142);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  width: 500px;
+  border-radius: 0.8rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  background-color: white;
+  padding: 1rem 1rem 3rem 1rem;
+  position: relative;
+  h2 {
+    font-weight: 800;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    b {
+      font-weight: 800;
+    }
+  }
+  input {
+    width: 100%;
+    text-indent: 0.5rem;
+  }
+  div {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.7rem;
+  }
+
+  ul {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+    button {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      border: 5px solid;
+    }
+  }
+
+  .span_btns {
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .btn {
+    border-radius: 0.3rem;
+    border: 1px solid #ddd;
+    box-shadow: 0 3px 5px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    padding: 0 0.5rem;
+    cursor: pointer;
+    &:disabled {
+      cursor: initial;
+    }
+  }
+
+  .span_del {
+    @extend .span_btns;
+    right: auto;
+    left: 1rem;
+  }
+
+  .btn_del {
+    position: absolute;
+    bottom: 1rem;
+    color: red;
+    @extend .btn;
+  }
+}
