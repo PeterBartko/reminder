@@ -63,7 +63,7 @@ const NewList: React.FC<Props> = ({ setShow, setListIndex }) => {
           <b style={{ color: values.color }}>{values.name}</b>
           {values.name && '"'}
         </h2>
-        <div>
+        <div className={styles.inp_wrap}>
           <label htmlFor="name">Name:</label>
           <input
             autoFocus
@@ -72,7 +72,7 @@ const NewList: React.FC<Props> = ({ setShow, setListIndex }) => {
             type="text"
           />
         </div>
-        <div>
+        <div className={styles.inp_wrap}>
           <p>Colour:</p>
           <ul>
             {colors?.map((color, i) => (

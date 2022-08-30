@@ -55,42 +55,46 @@
   padding: 1rem;
   width: 100%;
   height: 100%;
+  ul {
+    height: calc(100% - 136.32px);
+    position: relative;
+  }
 }
-
 .li {
   display: flex;
   width: 100%;
   position: relative;
   padding-top: 0.5rem;
+  &:hover .info {
+    display: block !important;
+  }
+  &:hover .flag {
+    display: block !important;
+  }
+  &:hover .delete {
+    display: block !important;
+  }
 
   span {
     width: 40px;
-    button {
-      aspect-ratio: 1;
-      width: 20px;
-      border-radius: 50%;
+    svg {
       cursor: pointer;
-      padding: 0.1rem;
-      border: none;
-      display: flex;
-      background-color: #fff;
-      justify-content: center;
-      align-items: center;
-      border: blue solid 2px;
-      div {
-        border-radius: 50%;
-        aspect-ratio: 1;
-        width: 20px;
-        background-color: blue;
+      &:hover {
+        opacity: 0.8;
       }
     }
   }
+
   .wrap {
     width: 100%;
     padding-bottom: 0.5rem;
     border-bottom: #ccc solid 1px;
     padding-right: 3rem;
     .tags {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      width: max-content;
       color: #999;
     }
   }
@@ -105,6 +109,16 @@
     svg {
       cursor: pointer;
     }
+    .info {
+      display: none;
+    }
+    .flag {
+      display: none;
+      opacity: 0.4;
+    }
+    .delete {
+      display: none;
+    }
   }
 
   input {
@@ -113,4 +127,33 @@
     font-size: inherit;
     width: 100%;
   }
+}
+
+.all_ul {
+  padding: 0.5rem 0;
+  h3 {
+    font-size: 1.4rem;
+    font-weight: 800;
+  }
+  & > button {
+    margin: 0.5rem 0 0 -2px;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+.no_rem {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #999;
+  font-weight: 800;
+  font-size: 1.3rem;
 }

@@ -24,15 +24,34 @@
       font-weight: 800;
     }
   }
+  h3 {
+    font-size: 0.8rem;
+    color: #aaa;
+  }
   input {
     width: 100%;
     text-indent: 0.5rem;
   }
-  div {
+  .inp_wrap {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     margin-bottom: 0.7rem;
+    label[for='title'] {
+      margin-right: 3.1rem;
+    }
+    label[for='description'] {
+      margin-bottom: auto;
+    }
+    input[type='date'],
+    input[type='time'] {
+      cursor: pointer;
+    }
+    textarea {
+      width: 100%;
+      padding: 0.5rem;
+      max-height: 100px;
+    }
   }
 
   ul {
@@ -83,4 +102,62 @@
     color: red;
     @extend .btn;
   }
+}
+
+.swith_wrap {
+  display: flex;
+  margin-bottom: 0.5rem;
+  gap: 1rem;
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: fit-content;
+    & > div {
+      background-color: red;
+      display: flex;
+      width: 27px;
+      height: 27px;
+      justify-content: center;
+      align-items: center;
+      border-radius: 0.3rem;
+      margin: 0 1rem 0 0;
+    }
+    p {
+      margin-right: auto;
+    }
+  }
+}
+
+.switch {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 20px;
+  width: 40px;
+  flex-shrink: 0;
+  cursor: pointer;
+  border-radius: 9999px;
+  div {
+    position: absolute;
+    pointer-events: none;
+    height: 17px;
+    width: 17px;
+    border-radius: 50%;
+    background-color: white;
+    transition: left 0.1s ease-in-out;
+  }
+}
+
+.sr_only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }

@@ -2,10 +2,15 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface Reminder {
   id: number
+  listId: number
   title: string
+  description?: string
   completed: boolean
-  deadline?: string
   flag: boolean
+  deadline?: {
+    date: string
+    time: string
+  }
 }
 
 export interface List {
@@ -17,10 +22,10 @@ export interface List {
 
 const initialState: List[] = [
   {
-    id: 0,
+    id: 4,
     name: 'Reminders',
     color: 'orange',
-    reminders: [{ id: 0, title: 'New Reminder', completed: false, flag: false }],
+    reminders: [{ id: 0, listId: 4, title: 'New Reminder', completed: false, flag: true }],
   },
 ]
 
@@ -28,16 +33,11 @@ export const listSlice = createSlice({
   name: 'lists',
   initialState,
   reducers: {
-    setList: (state: List[], { payload }: PayloadAction<List[]>) => {
+    setList: (state, { payload }: PayloadAction<List[]>) => {
       return payload
     },
     addNewList: (state: List[], { payload }: PayloadAction<List>) => {
-      state.push({
-        id: payload.id,
-        name: payload.name,
-        color: payload.color,
-        reminders: [],
-      })
+      state.push({ ...payload, reminders: [] })
       localStorage.lists = JSON.stringify(state)
     },
     editList: (state: List[], { payload }: PayloadAction<List>) => {
@@ -49,10 +49,69 @@ export const listSlice = createSlice({
       localStorage.lists = JSON.stringify(tmp)
       return tmp
     },
+
+    addNewReminderToList: (
+      state: List[],
+      { payload }: PayloadAction<{ listId: number; values: Reminder }>
+    ) => {
+      state.find(({ id }) => payload.listId == id)!.reminders?.push(payload.values)
+      localStorage.lists = JSON.stringify(state)
+    },
+    upadteReminder: (
+      state: List[],
+      { payload }: PayloadAction<{ listId: number; values: Reminder }>
+    ) => {
+      const { listId, values: reminder } = payload
+      const tmp = state.map(l => {
+        if (l.id == listId)
+          return {
+            ...l,
+            reminders: l.reminders?.map(r => (r.id == reminder.id ? reminder : r)),
+          }
+        else return l
+      })
+      localStorage.lists = JSON.stringify(tmp)
+      return tmp
+    },
+    deleteReminder: (state: List[], { payload }: PayloadAction<Reminder>) => {
+      const { id, listId } = payload
+      const tmp = state.map(l => {
+        if (l.id == listId)
+          return {
+            ...l,
+            reminders: l.reminders?.filter(r => r.id !== id),
+          }
+        else return l
+      })
+      localStorage.lists = JSON.stringify(tmp)
+      return tmp
+    },
+    syncChanges: (state: List[], { payload }: PayloadAction<Reminder>) => {
+      const { listId, id } = payload
+      const list = state.find(l => l.id == listId)!
+      list.reminders = list.reminders?.map(r => (r.id == id ? payload : r))
+      localStorage.lists = JSON.stringify(state)
+    },
+    syncDelete: (state: List[], { payload }: PayloadAction<Reminder>) => {
+      const { listId, id } = payload
+      const list = state.find(l => l.id == listId)!
+      list.reminders = list.reminders?.filter(r => r.id !== id)
+      localStorage.lists = JSON.stringify(state)
+    },
   },
 })
 
 export const getListState = (state: { lists: List[] }) => state.lists
-export const { addNewList, setList, editList, deleteList } = listSlice.actions
+export const {
+  addNewList,
+  setList,
+  editList,
+  deleteList,
+  addNewReminderToList,
+  upadteReminder,
+  syncChanges,
+  deleteReminder,
+  syncDelete,
+} = listSlice.actions
 
 export default listSlice.reducer
