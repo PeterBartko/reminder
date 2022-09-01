@@ -21,10 +21,11 @@ const colors = [
 
 interface Props {
   setShow: Dispatch<SetStateAction<Show>>
+  setListIndex: Dispatch<SetStateAction<number>>
   list: List
 }
 
-const EditList: React.FC<Props> = ({ setShow, list }) => {
+const EditList: React.FC<Props> = ({ setShow, list, setListIndex }) => {
   const [values, setValues] = useState<List>(list)
   const [showDelDliaog, setShowDelDliaog] = useState(false)
 
@@ -52,6 +53,7 @@ const EditList: React.FC<Props> = ({ setShow, list }) => {
 
   const handleDelete = () => {
     dispatch(deleteList(values.id))
+    setListIndex(0)
     setShow(s => ({ ...s, editModal: false }))
   }
 

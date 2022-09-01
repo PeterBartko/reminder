@@ -7,6 +7,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 1rem;
 }
 
 .modal {
@@ -29,8 +30,14 @@
     color: #aaa;
   }
   input {
+    @media (max-width: 600px) {
+      height: 2rem;
+      font-size: 1.1rem;
+    }
     width: 100%;
     text-indent: 0.5rem;
+    border: black solid 1px;
+    border-radius: 0.2rem;
   }
   .inp_wrap {
     display: flex;
@@ -59,6 +66,19 @@
     display: flex;
     justify-content: space-between;
     list-style: none;
+
+    @media (max-width: 600px) {
+      // width: 50%;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      button {
+        width: 30px !important;
+        height: 30px !important;
+      }
+    }
+
     button {
       width: 20px;
       height: 20px;
@@ -102,6 +122,16 @@
     color: red;
     @extend .btn;
   }
+
+  @keyframes popup {
+    0% {
+      scale: 0.8;
+    }
+    100% {
+      scale: 1;
+    }
+  }
+  animation: popup 50ms ease-out;
 }
 
 .swith_wrap {

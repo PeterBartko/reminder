@@ -11,19 +11,12 @@ interface Props {
 const EditReminder: React.FC<Props> = ({ setShowEdit, reminder }) => {
   const { id, listId, title } = reminder
   const [values, setValues] = useState<Reminder>(reminder)
-  const [showDelDliaog, setShowDelDliaog] = useState(false)
 
   const dispatch = useDispatch()
 
   const handleEdit = () => {
     dispatch(upadteReminder({ listId, values }))
-    // dispatch(updateSmartList(values))
     setShowEdit(false)
-  }
-
-  const handleDelete = () => {
-    // dispatch(deleteList(values.id))
-    // setShow(s => ({ ...s, editModal: false }))
   }
 
   return (
@@ -38,12 +31,21 @@ const EditReminder: React.FC<Props> = ({ setShowEdit, reminder }) => {
         <h2 style={{ marginBottom: 0 }}>Edit "{title}"</h2>
         <h3 style={{ marginBottom: '1rem' }}>Created {new Date(id).toLocaleDateString('en-US')}</h3>
         <div className={styles.inp_wrap}>
-          <label htmlFor="name">Title:</label>
+          <label htmlFor="title">Title:</label>
           <input
+            value={values.title}
             autoFocus
             onInput={(e: any) => setValues(v => ({ ...v, title: e.target.value }))}
-            id="name"
+            id="title"
             type="text"
+          />
+        </div>
+        <div className={styles.inp_wrap}>
+          <label htmlFor="description">Desctiption:</label>
+          <textarea
+            id="description"
+            value={values.description}
+            onInput={(e: any) => setValues(v => ({ ...v, description: e.target.value }))}
           />
         </div>
 
@@ -64,22 +66,6 @@ const EditReminder: React.FC<Props> = ({ setShowEdit, reminder }) => {
         </div>
 
         <hr color="#eee" />
-
-        {!showDelDliaog && (
-          <button onClick={() => setShowDelDliaog(true)} className={styles.btn_del}>
-            Delete
-          </button>
-        )}
-        {showDelDliaog && (
-          <span className={styles.span_del}>
-            <button className={styles.btn} onClick={() => setShowDelDliaog(false)}>
-              Cancel
-            </button>
-            <button className={styles.btn} style={{ color: 'red' }} onClick={handleDelete}>
-              OK
-            </button>
-          </span>
-        )}
 
         <span style={{ right: '5rem' }} className={styles.span_btns}>
           <button className={styles.btn} onClick={() => setShowEdit(false)}>

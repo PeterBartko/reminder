@@ -3,14 +3,15 @@ import styles from '../styles/modules/list.module.scss'
 import { List } from '../redux/listsSlice'
 import NewReminder from './modals/NewReminder'
 import Reminder from './Reminder'
-import { useDispatch } from 'react-redux'
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 const List: React.FC<List> = ({ id: listId, name, color, reminders }) => {
   const [showNew, setShowNew] = useState(false)
   const [showCompleted, setShowCompleted] = useState(false)
-  const dispatch = useDispatch()
+  const [noRems, setNoRems] = useState(false)
+  const [listRef] = useAutoAnimate<HTMLUListElement>({ duration: 200 })
 
-  const renderLists = () => {
+  const renderReminders = () => {
     const rems = reminders
       ?.filter(({ completed }) => completed == showCompleted)
       .map(reminder => (
@@ -36,7 +37,7 @@ const List: React.FC<List> = ({ id: listId, name, color, reminders }) => {
         </button>
       </span>
 
-      <ul>{renderLists()}</ul>
+      <ul ref={listRef}>{renderReminders()}</ul>
 
       {showNew && <NewReminder setShowNew={setShowNew} listId={listId} />}
     </div>

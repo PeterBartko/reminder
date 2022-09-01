@@ -4,6 +4,7 @@ import { ImInfo } from 'react-icons/im'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   deleteReminder,
+  List,
   Reminder,
   syncChanges,
   syncDelete,
@@ -29,9 +30,10 @@ interface Props {
   color: string
   listId: number
   setReminders?: Dispatch<SetStateAction<Reminder[] | undefined>>
+  setLists?: Dispatch<SetStateAction<List[]>>
 }
 
-const Reminder: React.FC<Props> = ({ reminder, color, listId, setReminders }) => {
+const Reminder: React.FC<Props> = ({ reminder, color, listId, setReminders, setLists }) => {
   const { id, listId: from, title, flag, deadline, description, completed } = reminder
   const [showEdit, setShowEdit] = useState(false)
   const dispatch = useDispatch()
@@ -43,24 +45,45 @@ const Reminder: React.FC<Props> = ({ reminder, color, listId, setReminders }) =>
     fromTag.name = lists.find(l => l.id == from)!.name
   }
 
-  // let bool = false
   const handleComplete = () => {
-    // const int = setTimeout(() => {
     if (setReminders) {
       setReminders(old => old?.map(r => (r.id == id ? { ...r, completed: !r.completed } : r)))
+      dispatch(syncChanges({ ...reminder, completed: !reminder.completed }))
+    } else if (setLists) {
+      setLists(old =>
+        old?.map(l =>
+          l.id == listId
+            ? {
+                ...l,
+                reminders: l.reminders?.map(r =>
+                  r.id == id ? { ...r, completed: !r.completed } : r
+                ),
+              }
+            : l
+        )
+      )
       dispatch(syncChanges({ ...reminder, completed: !reminder.completed }))
     } else {
       const values = { ...reminder, completed: !reminder.completed }
       dispatch(upadteReminder({ listId, values }))
-      // dispatch(updateSmartList(values))
     }
-    // }, 2000)
-    // if (bool) clearTimeout(int)
   }
 
   const handleFlag = () => {
     if (setReminders) {
       setReminders(old => old?.map(r => (r.id == id ? { ...r, flag: !r.flag } : r)))
+      dispatch(syncChanges({ ...reminder, flag: !reminder.flag }))
+    } else if (setLists) {
+      setLists(old =>
+        old?.map(l =>
+          l.id == listId
+            ? {
+                ...l,
+                reminders: l.reminders?.map(r => (r.id == id ? { ...r, flag: !r.flag } : r)),
+              }
+            : l
+        )
+      )
       dispatch(syncChanges({ ...reminder, flag: !reminder.flag }))
     } else {
       const values = { ...reminder, flag: !reminder.flag }
@@ -72,13 +95,25 @@ const Reminder: React.FC<Props> = ({ reminder, color, listId, setReminders }) =>
     if (setReminders) {
       setReminders(old => old?.filter(r => r.id !== id))
       dispatch(syncDelete(reminder))
+    } else if (setLists) {
+      setLists(old =>
+        old?.map(l =>
+          l.id == listId
+            ? {
+                ...l,
+                reminders: l.reminders?.filter(r => r.id != id),
+              }
+            : l
+        )
+      )
+      dispatch(syncDelete(reminder))
     } else {
       dispatch(deleteReminder(reminder))
     }
   }
 
   const renderEdit = () => {
-    if (showEdit && listId > 4)
+    if (showEdit && listId >= 4)
       return <EditReminder setShowEdit={setShowEdit} reminder={reminder} />
     else if (showEdit && listId < 4 && setReminders)
       return (

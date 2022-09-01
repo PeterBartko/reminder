@@ -10,7 +10,7 @@ interface Props {
 }
 
 const EditSmartReminder: React.FC<Props> = ({ setShowEdit, reminder, setReminders }) => {
-  const { id, listId, title } = reminder
+  const { id, title } = reminder
   const [values, setValues] = useState<Reminder>(reminder)
   const [showDelDliaog, setShowDelDliaog] = useState(false)
 
@@ -21,8 +21,6 @@ const EditSmartReminder: React.FC<Props> = ({ setShowEdit, reminder, setReminder
     dispatch(syncChanges(values))
     setShowEdit(false)
   }
-
-  const handleDelete = () => {}
 
   return (
     <div
@@ -62,22 +60,6 @@ const EditSmartReminder: React.FC<Props> = ({ setShowEdit, reminder, setReminder
         </div>
 
         <hr color="#eee" />
-
-        {!showDelDliaog && (
-          <button onClick={() => setShowDelDliaog(true)} className={styles.btn_del}>
-            Delete
-          </button>
-        )}
-        {showDelDliaog && (
-          <span className={styles.span_del}>
-            <button className={styles.btn} onClick={() => setShowDelDliaog(false)}>
-              Cancel
-            </button>
-            <button className={styles.btn} style={{ color: 'red' }} onClick={handleDelete}>
-              OK
-            </button>
-          </span>
-        )}
 
         <span style={{ right: '5rem' }} className={styles.span_btns}>
           <button className={styles.btn} onClick={() => setShowEdit(false)}>
