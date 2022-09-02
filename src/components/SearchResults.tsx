@@ -17,7 +17,9 @@ const searchReminders = (lists: List[], search: string) => {
   return lists
     .map(l => ({
       ...l,
-      reminders: l.reminders?.filter(r => r.title.indexOf(search) != -1)!,
+      reminders: l.reminders?.filter(
+        r => r.title.toLowerCase().indexOf(search.toLowerCase()) != -1
+      )!,
     }))
     .filter(l => l.reminders.length !== 0)
 }
@@ -53,7 +55,7 @@ const SearchResults: React.FC<Props> = ({ search, mobile, setSearch }) => {
     <div className={styles.container}>
       {mobile && (
         <div style={{ left: search != '' ? '6rem' : '1rem' }} className="search mobile-search">
-          <AiOutlineSearch size={20} color="black" />
+          <AiOutlineSearch size={20} />
           <input
             autoFocus
             type="text"

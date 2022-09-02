@@ -3,9 +3,11 @@ import styles from '../styles/modules/list.module.scss'
 import Reminder from './Reminder'
 import { RootState } from '../redux/store'
 import { useSelector } from 'react-redux'
-import { List, Reminder as IReminder } from '../redux/listsSlice'
+import { List as SmartList, Reminder as IReminder } from '../redux/listsSlice'
 import { BiPlusCircle } from 'react-icons/bi'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
+import NewReminder from './modals/NewReminder'
+import { Show } from './List'
 
 interface Props {
   id: number
@@ -35,7 +37,7 @@ export const isToday = (date: string | undefined) => {
   return new Date(date).toDateString() === new Date(Date.now()).toDateString()
 }
 
-const getReminder = (lists: List[], id: number) => {
+const getReminder = (lists: SmartList[], id: number) => {
   switch (id) {
     case 0:
       return lists.map(({ reminders }) => reminders?.filter(r => isToday(r.deadline?.date))!).flat()
@@ -46,9 +48,9 @@ const getReminder = (lists: List[], id: number) => {
   }
 }
 
-const List: React.FC<Props> = ({ id }) => {
-  const [showNew, setShowNew] = useState(false)
-  const [showCompleted, setShowCompleted] = useState(false)
+const SmartList: React.FC<Props> = ({ id }) => {
+  const [show, setShow] = useState<Show>({ new: false, modal: false, completed: false })
+  const [listId, setListId] = useState(-1)
   const [reminders, setReminders] = useState<IReminder[]>()
   const lists = useSelector((state: RootState) => state.lists)
   const [listRef] = useAutoAnimate<HTMLUListElement>({ duration: 200 })
@@ -58,11 +60,16 @@ const List: React.FC<Props> = ({ id }) => {
     setReminders(getReminder(lists, id))
   }, [id, lists])
 
+  const handleAdd = (id: number) => {
+    setShow(s => ({ ...s, modal: true }))
+    setListId(id)
+  }
+
   const renderReminders = () => {
     let rems = []
     if (id == 2) {
       rems = lists
-        .filter(l => l.reminders?.length != 0 || showNew)
+        .filter(l => l.reminders?.length != 0 || show.new)
         .map(({ id: from, color, name, reminders }) => (
           <div key={from} className={styles.all_ul}>
             <h3 style={{ color }}>{name}</h3>
@@ -75,8 +82,8 @@ const List: React.FC<Props> = ({ id }) => {
                 setReminders={setReminders}
               />
             ))}
-            {showNew && (
-              <button>
+            {show.new && (
+              <button onClick={() => handleAdd(from)}>
                 <BiPlusCircle color="#aaa" size={25} />
               </button>
             )}
@@ -84,7 +91,7 @@ const List: React.FC<Props> = ({ id }) => {
         ))
     } else {
       rems = reminders
-        ?.filter(({ completed }) => completed == showCompleted)
+        ?.filter(({ completed }) => completed == show.completed)
         .map(reminder => (
           <Reminder
             key={reminder.id}
@@ -103,7 +110,7 @@ const List: React.FC<Props> = ({ id }) => {
       <header style={{ marginTop: id != 2 ? '27.19px' : 0 }} className={styles.header}>
         <h1 style={{ color }}>{name}</h1>
         <div>
-          {id == 2 && <button onClick={() => setShowNew(s => !s)}>+</button>}
+          {id == 2 && <button onClick={() => setShow(s => ({ ...s, new: !s.new }))}>+</button>}
           <p style={{ color }}>
             {id != 2
               ? reminders?.reduce((p, c) => p + (c.completed ? 0 : 1), 0)
@@ -123,15 +130,20 @@ const List: React.FC<Props> = ({ id }) => {
           Completed
         </h2>
         {id != 2 && (
-          <button onClick={() => setShowCompleted(s => !s)} style={{ color }}>
-            {showCompleted ? 'Hide' : 'Show'}
+          <button
+            onClick={() => setShow(s => ({ ...s, completed: !s.completed }))}
+            style={{ color }}
+          >
+            {show.completed ? 'Hide' : 'Show'}
           </button>
         )}
       </span>
 
       <ul ref={listRef}>{renderReminders()}</ul>
+
+      {show.modal && <NewReminder setShow={setShow} listId={listId} />}
     </div>
   )
 }
 
-export default List
+export default SmartList

@@ -4,13 +4,14 @@ import { useDispatch } from 'react-redux'
 import { addNewReminderToList, Reminder } from '../../redux/listsSlice'
 import { BsFillClockFill, BsFlagFill } from 'react-icons/bs'
 import { Switch } from '@headlessui/react'
+import { Show } from '../List'
 
 interface Props {
-  setShowNew: Dispatch<SetStateAction<boolean>>
+  setShow: Dispatch<SetStateAction<Show>>
   listId: number
 }
 
-const NewReminder: React.FC<Props> = ({ setShowNew, listId }) => {
+const NewReminder: React.FC<Props> = ({ setShow, listId }) => {
   const [values, setValues] = useState<Reminder>({
     id: Date.now(),
     listId,
@@ -27,9 +28,16 @@ const NewReminder: React.FC<Props> = ({ setShowNew, listId }) => {
     setValues(v => ({ ...v, flag }))
   }, [flag])
 
+  const close = () => {
+    setShow(s => {
+      if ('modal' in s) return { ...s, new: false, modal: false }
+      else return { ...s, new: false }
+    })
+  }
+
   const addNew = () => {
     dispatch(addNewReminderToList({ listId, values }))
-    setShowNew(false)
+    close()
   }
 
   return (
@@ -37,7 +45,7 @@ const NewReminder: React.FC<Props> = ({ setShowNew, listId }) => {
       className={styles.bg}
       id="bg"
       onClick={(e: any) => {
-        if (e.target.id === 'bg') setShowNew(false)
+        if (e.target.id === 'bg') close()
       }}
     >
       <div className={styles.modal}>
@@ -118,7 +126,7 @@ const NewReminder: React.FC<Props> = ({ setShowNew, listId }) => {
         <hr color="#eee" />
 
         <span className={styles.span_btns}>
-          <button className={styles.btn} onClick={() => setShowNew(false)}>
+          <button className={styles.btn} onClick={close}>
             Cancel
           </button>
           <button className={styles.btn} onClick={addNew} disabled={values.title === ''}>

@@ -5,15 +5,19 @@ import NewReminder from './modals/NewReminder'
 import Reminder from './Reminder'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 
+export interface Show {
+  new: boolean
+  completed: boolean
+  modal?: boolean
+}
+
 const List: React.FC<List> = ({ id: listId, name, color, reminders }) => {
-  const [showNew, setShowNew] = useState(false)
-  const [showCompleted, setShowCompleted] = useState(false)
-  const [noRems, setNoRems] = useState(false)
+  const [show, setShow] = useState<Show>({ completed: false, new: false })
   const [listRef] = useAutoAnimate<HTMLUListElement>({ duration: 200 })
 
   const renderReminders = () => {
     const rems = reminders
-      ?.filter(({ completed }) => completed == showCompleted)
+      ?.filter(({ completed }) => completed == show.completed)
       .map(reminder => (
         <Reminder key={reminder.id} reminder={reminder} listId={listId} color={color} />
       ))
@@ -25,21 +29,21 @@ const List: React.FC<List> = ({ id: listId, name, color, reminders }) => {
       <header className={styles.header}>
         <h1 style={{ color }}>{name}</h1>
         <div>
-          <button onClick={() => setShowNew(true)}>+</button>
+          <button onClick={() => setShow(s => ({ ...s, new: true }))}>+</button>
           <p style={{ color }}>{reminders?.reduce((p, c) => p + (c.completed ? 0 : 1), 0)}</p>
         </div>
       </header>
 
       <span className={styles.h2}>
         <h2>{reminders?.reduce((p, c) => p + (c.completed ? 1 : 0), 0)} Completed</h2>
-        <button onClick={() => setShowCompleted(s => !s)} style={{ color }}>
-          {showCompleted ? 'Hide' : 'Show'}
+        <button onClick={() => setShow(s => ({ ...s, completed: !s.completed }))} style={{ color }}>
+          {show.completed ? 'Hide' : 'Show'}
         </button>
       </span>
 
       <ul ref={listRef}>{renderReminders()}</ul>
 
-      {showNew && <NewReminder setShowNew={setShowNew} listId={listId} />}
+      {show.new && <NewReminder setShow={setShow} listId={listId} />}
     </div>
   )
 }

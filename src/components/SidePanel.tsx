@@ -80,7 +80,7 @@ const SidePanel: React.FC<Props> = ({ setListIndex, listIndex, setSearch, search
   return (
     <section className={styles.side_menu}>
       <span className="search">
-        <AiOutlineSearch size={20} color="black" />
+        <AiOutlineSearch size={20} />
         <input
           type="text"
           value={search}
