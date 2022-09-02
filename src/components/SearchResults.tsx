@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import styles from '../styles/modules/list.module.scss'
 import { List } from '../redux/listsSlice'
 import Reminder from './Reminder'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { RootState } from '../redux/store'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
@@ -29,7 +29,7 @@ const SearchResults: React.FC<Props> = ({ search, mobile, setSearch }) => {
 
   useEffect(() => {
     setReminders(searchReminders(lists, search))
-  }, [search])
+  }, [lists, search])
 
   const renderReminders = () => {
     const rems = reminders.map(({ id: from, color, name, reminders }) => (
@@ -64,7 +64,7 @@ const SearchResults: React.FC<Props> = ({ search, mobile, setSearch }) => {
         </div>
       )}
       <header style={{ marginTop: '27.19px' }} className={styles.header}>
-        <h1 style={{ color: 'black' }}>Results for "{search}"</h1>
+        <h1 style={{ color: 'black' }}>Results for &quot;{search}&quot;</h1>
         <div>
           <p style={{ color: 'black' }}>
             {reminders?.reduce((p, c) => p + c.reminders!.length, 0)}

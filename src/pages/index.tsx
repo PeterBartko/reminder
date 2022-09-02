@@ -65,14 +65,12 @@ const Home: NextPage = () => {
       <main>
         {mobile ? (
           !hide ? (
-            <>
-              <SidePanel
-                setListIndex={setListIndex}
-                listIndex={listIndex}
-                setSearch={setSearch}
-                search={search}
-              />
-            </>
+            <SidePanel
+              setListIndex={setListIndex}
+              listIndex={listIndex}
+              setSearch={setSearch}
+              search={search}
+            />
           ) : (
             <section className="right-view">
               <button

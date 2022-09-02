@@ -36,11 +36,11 @@ interface Props {
 const Reminder: React.FC<Props> = ({ reminder, color, listId, setReminders, setLists }) => {
   const { id, listId: from, title, flag, deadline, description, completed } = reminder
   const [showEdit, setShowEdit] = useState(false)
+  const lists = useSelector((state: RootState) => state.lists)
   const dispatch = useDispatch()
 
   const fromTag: From = {}
   if (listId < 4) {
-    const lists = useSelector((state: RootState) => state.lists)
     fromTag.color = lists.find(l => l.id == from)!.color
     fromTag.name = lists.find(l => l.id == from)!.name
   }

@@ -31,7 +31,7 @@ const EditSmartReminder: React.FC<Props> = ({ setShowEdit, reminder, setReminder
       }}
     >
       <div className={styles.modal}>
-        <h2 style={{ marginBottom: 0 }}>Edit "{title}"</h2>
+        <h2 style={{ marginBottom: 0 }}>Edit &quot;{title}&quot;</h2>
         <h3 style={{ marginBottom: '1rem' }}>Created {new Date(id).toLocaleDateString('en-US')}</h3>
         <div className={styles.inp_wrap}>
           <label htmlFor="name">Title:</label>
