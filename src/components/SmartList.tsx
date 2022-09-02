@@ -72,16 +72,20 @@ const SmartList: React.FC<Props> = ({ id }) => {
         .filter(l => l.reminders?.length != 0 || show.new)
         .map(({ id: from, color, name, reminders }) => (
           <div key={from} className={styles.all_ul}>
-            <h3 style={{ color }}>{name}</h3>
-            {reminders?.map(reminder => (
-              <Reminder
-                key={reminder.id}
-                color={color}
-                listId={id}
-                reminder={reminder}
-                setReminders={setReminders}
-              />
-            ))}
+            {reminders?.some(r => (show.completed ? r.completed : !r.completed)) && (
+              <h3 style={{ color }}>{name}</h3>
+            )}
+            {reminders
+              ?.filter(({ completed }) => (show.completed ? completed : !completed))
+              .map(reminder => (
+                <Reminder
+                  key={reminder.id}
+                  color={color}
+                  listId={id}
+                  reminder={reminder}
+                  setReminders={setReminders}
+                />
+              ))}
             {show.new && (
               <button onClick={() => handleAdd(from)}>
                 <BiPlusCircle color="#aaa" size={25} />
@@ -129,14 +133,11 @@ const SmartList: React.FC<Props> = ({ id }) => {
               )}{' '}
           Completed
         </h2>
-        {id != 2 && (
-          <button
-            onClick={() => setShow(s => ({ ...s, completed: !s.completed }))}
-            style={{ color }}
-          >
-            {show.completed ? 'Hide' : 'Show'}
-          </button>
-        )}
+        {/* {id != 2 && ( */}
+        <button onClick={() => setShow(s => ({ ...s, completed: !s.completed }))} style={{ color }}>
+          {show.completed ? 'Hide' : 'Show'}
+        </button>
+        {/* )} */}
       </span>
 
       <ul ref={listRef}>{renderReminders()}</ul>

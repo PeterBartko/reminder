@@ -43,7 +43,12 @@ const SidePanel: React.FC<Props> = ({ setListIndex, listIndex, setSearch, search
     {
       title: 'Today',
       count: lists.reduce(
-        (p, c) => p + c.reminders!?.reduce((t, r) => t + (isToday(r.deadline?.date) ? 1 : 0), 0),
+        (p, c) =>
+          p +
+          c.reminders!?.reduce(
+            (t, r) => t + (isToday(r.deadline?.date) && !r.completed ? 1 : 0),
+            0
+          ),
         0
       ),
       color: 'dodgerblue',
@@ -52,7 +57,7 @@ const SidePanel: React.FC<Props> = ({ setListIndex, listIndex, setSearch, search
     {
       title: 'Scheduled',
       count: lists.reduce(
-        (p, c) => p + c.reminders!?.reduce((t, r) => t + (r.deadline ? 1 : 0), 0),
+        (p, c) => p + c.reminders!?.reduce((t, r) => t + (r.deadline && !r.completed ? 1 : 0), 0),
         0
       ),
       color: 'red',
@@ -60,13 +65,19 @@ const SidePanel: React.FC<Props> = ({ setListIndex, listIndex, setSearch, search
     },
     {
       title: 'All',
-      count: lists.reduce((p, c) => p + c.reminders!?.length, 0),
+      count: lists.reduce(
+        (p, c) => p + c.reminders!?.reduce((t, r) => t + (!r.completed ? 1 : 0), 0),
+        0
+      ),
       color: 'gray',
       icon: <BsFillInboxFill size={22} />,
     },
     {
       title: 'Flagged',
-      count: lists.reduce((p, c) => p + c.reminders!?.reduce((t, r) => t + (r.flag ? 1 : 0), 0), 0),
+      count: lists.reduce(
+        (p, c) => p + c.reminders!?.reduce((t, r) => t + (r.flag && !r.completed ? 1 : 0), 0),
+        0
+      ),
       color: 'orange',
       icon: <BsFlagFill size={22} />,
     },
@@ -131,7 +142,7 @@ const SidePanel: React.FC<Props> = ({ setListIndex, listIndex, setSearch, search
               </div>
               <p>{name}</p>
             </span>
-            <p>{reminders!.length}</p>
+            <p>{reminders!.reduce((p, r) => p + (!r.completed ? 1 : 0), 0)}</p>
           </li>
         ))}
       </ul>
