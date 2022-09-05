@@ -1,10 +1,11 @@
 import styles from '../../styles/modules/modal.module.scss'
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { addNewReminderToList, Reminder } from '../../redux/listsSlice'
 import { BsFillClockFill, BsFlagFill } from 'react-icons/bs'
 import { Switch } from '@headlessui/react'
 import { Show } from '../List'
+import { motion } from 'framer-motion'
 
 interface Props {
   setShow: Dispatch<SetStateAction<Show>>
@@ -41,14 +42,24 @@ const NewReminder: React.FC<Props> = ({ setShow, listId }) => {
   }
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0.5 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ ease: 'anticipate', duration: 0.2 }}
       className={styles.bg}
       id="bg"
       onClick={(e: any) => {
         if (e.target.id === 'bg') close()
       }}
     >
-      <div className={styles.modal}>
+      <motion.div
+        initial={{ scale: 0.8 }}
+        animate={{ scale: 1 }}
+        exit={{ scale: 0 }}
+        transition={{ ease: 'anticipate', duration: 0.1 }}
+        className={styles.modal}
+      >
         <h2>New Reminder</h2>
         <div className={styles.inp_wrap}>
           <label htmlFor="title">Title:</label>
@@ -133,8 +144,8 @@ const NewReminder: React.FC<Props> = ({ setShow, listId }) => {
             OK
           </button>
         </span>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }
 

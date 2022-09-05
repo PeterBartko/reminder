@@ -8,6 +8,7 @@ import { BiPlusCircle } from 'react-icons/bi'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import NewReminder from './modals/NewReminder'
 import { Show } from './List'
+import { AnimatePresence } from 'framer-motion'
 
 interface Props {
   id: number
@@ -142,7 +143,9 @@ const SmartList: React.FC<Props> = ({ id }) => {
 
       <ul ref={listRef}>{renderReminders()}</ul>
 
-      {show.modal && <NewReminder setShow={setShow} listId={listId} />}
+      <AnimatePresence>
+        {show.modal && <NewReminder setShow={setShow} listId={listId} />}
+      </AnimatePresence>
     </div>
   )
 }

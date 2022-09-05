@@ -4,6 +4,7 @@ import { List } from '../redux/listsSlice'
 import NewReminder from './modals/NewReminder'
 import Reminder from './Reminder'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { AnimatePresence } from 'framer-motion'
 
 export interface Show {
   new: boolean
@@ -43,7 +44,9 @@ const List: React.FC<List> = ({ id: listId, name, color, reminders }) => {
 
       <ul ref={listRef}>{renderReminders()}</ul>
 
-      {show.new && <NewReminder setShow={setShow} listId={listId} />}
+      <AnimatePresence>
+        {show.new && <NewReminder setShow={setShow} listId={listId} />}
+      </AnimatePresence>
     </div>
   )
 }

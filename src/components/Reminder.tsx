@@ -14,6 +14,7 @@ import { RootState } from '../redux/store'
 import styles from '../styles/modules/list.module.scss'
 import EditReminder from './modals/EditReminder'
 import EditSmartReminder from './modals/EditSmartReminder'
+import { AnimatePresence } from 'framer-motion'
 
 interface Deadline {
   date: string
@@ -177,8 +178,7 @@ const Reminder: React.FC<Props> = ({ reminder, color, listId, setReminders, setL
           <BsTrash color="red" size={20} />
         </button>
       </div>
-
-      {renderEdit()}
+      <AnimatePresence>{renderEdit()}</AnimatePresence>
     </li>
   )
 }

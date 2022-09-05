@@ -2,6 +2,7 @@ import styles from '../../styles/modules/modal.module.scss'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Reminder, syncChanges } from '../../redux/listsSlice'
+import { motion } from 'framer-motion'
 
 interface Props {
   setShowEdit: Dispatch<SetStateAction<boolean>>
@@ -23,14 +24,24 @@ const EditSmartReminder: React.FC<Props> = ({ setShowEdit, reminder, setReminder
   }
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0.5 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ ease: 'anticipate', duration: 0.2 }}
       className={styles.bg}
       id="bg"
       onClick={(e: any) => {
         if (e.target.id === 'bg') setShowEdit(false)
       }}
     >
-      <div className={styles.modal}>
+      <motion.div
+        initial={{ scale: 0.8 }}
+        animate={{ scale: 1 }}
+        exit={{ scale: 0 }}
+        transition={{ ease: 'anticipate', duration: 0.1 }}
+        className={styles.modal}
+      >
         <h2 style={{ marginBottom: 0 }}>Edit &quot;{title}&quot;</h2>
         <h3 style={{ marginBottom: '1rem' }}>Created {new Date(id).toLocaleDateString('en-US')}</h3>
         <div className={styles.inp_wrap}>
@@ -69,8 +80,8 @@ const EditSmartReminder: React.FC<Props> = ({ setShowEdit, reminder, setReminder
             OK
           </button>
         </span>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }
 

@@ -14,6 +14,7 @@ import NewList from './modals/NewList'
 import EditList from './modals/EditList'
 import styles from '../styles/modules/sidepanel.module.scss'
 import { isToday } from './SmartList'
+import { AnimatePresence } from 'framer-motion'
 interface Props {
   setListIndex: Dispatch<SetStateAction<number>>
   setSearch: Dispatch<SetStateAction<string>>
@@ -159,14 +160,17 @@ const SidePanel: React.FC<Props> = ({ setListIndex, listIndex, setSearch, search
         <p>Edit</p>
       </button>
 
-      {show.newList && <NewList setShow={setShow} setListIndex={setListIndex} />}
-      {show.editModal && (
-        <EditList
-          setShow={setShow}
-          list={lists.find(({ id }) => id == editIndex)!}
-          setListIndex={setListIndex}
-        />
-      )}
+      <AnimatePresence>
+        {show.newList && <NewList setShow={setShow} setListIndex={setListIndex} />}
+
+        {show.editModal && (
+          <EditList
+            setShow={setShow}
+            list={lists.find(({ id }) => id == editIndex)!}
+            setListIndex={setListIndex}
+          />
+        )}
+      </AnimatePresence>
     </section>
   )
 }

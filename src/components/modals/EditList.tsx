@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { deleteList, editList, List } from '../../redux/listsSlice'
 import { Show } from '../SidePanel'
+import { motion } from 'framer-motion'
 
 const colors = [
   'red',
@@ -58,14 +59,24 @@ const EditList: React.FC<Props> = ({ setShow, list, setListIndex }) => {
   }
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0.5 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ ease: 'anticipate', duration: 0.2 }}
       className={styles.bg}
       id="bg"
       onClick={(e: any) => {
         if (e.target.id === 'bg') setShow(s => ({ ...s, editModal: false }))
       }}
     >
-      <div className={styles.modal}>
+      <motion.div
+        initial={{ scale: 0.8 }}
+        animate={{ scale: 1 }}
+        exit={{ scale: 0 }}
+        transition={{ ease: 'anticipate', duration: 0.1 }}
+        className={styles.modal}
+      >
         <h2>
           Edit {values.name && '"'}
           <b style={{ color: values.color }}>{values.name}</b>
@@ -129,8 +140,8 @@ const EditList: React.FC<Props> = ({ setShow, list, setListIndex }) => {
             OK
           </button>
         </span>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }
 
