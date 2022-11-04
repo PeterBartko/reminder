@@ -4,10 +4,10 @@ export interface Reminder {
   id: number
   listId: number
   title: string
-  description?: string
+  description: string
   completed: boolean
   flag: boolean
-  deadline?: {
+  deadline: {
     date: string
     time: string
   }
@@ -17,7 +17,7 @@ export interface List {
   id: number
   name: string
   color: string
-  reminders?: Reminder[]
+  reminders: Reminder[]
 }
 
 const initialState: List[] = [
@@ -25,7 +25,20 @@ const initialState: List[] = [
     id: 4,
     name: 'Reminders',
     color: 'orange',
-    reminders: [{ id: 0, listId: 4, title: 'New Reminder', completed: false, flag: true }],
+    reminders: [
+      {
+        id: 0,
+        listId: 4,
+        title: 'New Reminder',
+        description: '',
+        completed: false,
+        flag: true,
+        deadline: {
+          date: '',
+          time: '',
+        },
+      },
+    ],
   },
 ]
 

@@ -22,7 +22,7 @@ const List: React.FC<List> = ({ id: listId, name, color, reminders }) => {
       .map(reminder => (
         <Reminder key={reminder.id} reminder={reminder} listId={listId} color={color} />
       ))
-    return rems?.length == 0 ? <p className={styles.no_rem}>No Reminders</p> : rems
+    return !rems?.length ? <p className={styles.no_rem}>No Reminders</p> : rems
   }
 
   return (
@@ -45,7 +45,7 @@ const List: React.FC<List> = ({ id: listId, name, color, reminders }) => {
       <ul ref={listRef}>{renderReminders()}</ul>
 
       <AnimatePresence>
-        {show.new && <NewReminder setShow={setShow} listId={listId} />}
+        {show.new && <NewReminder setShow={setShow} listId={listId} reminders={reminders} />}
       </AnimatePresence>
     </div>
   )

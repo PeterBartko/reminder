@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { addNewList, List } from '../../redux/listsSlice'
 import { Show } from '../SidePanel'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 
 const colors = [
   'red',
@@ -26,7 +26,7 @@ interface Props {
 }
 
 const NewList: React.FC<Props> = ({ setShow, setListIndex }) => {
-  const [values, setValues] = useState<List>({ name: '', color: '', id: Date.now() })
+  const [values, setValues] = useState<List>({ name: '', color: '', id: Date.now(), reminders: [] })
   const liRefs = useRef([])
   const dispatch = useDispatch()
 

@@ -1,4 +1,4 @@
-import Document, { Html, Head, Main, NextScript } from 'next/document'
+import { Html, Head, Main, NextScript } from 'next/document'
 
 const MyDocument = () => {
   return (
@@ -7,6 +7,7 @@ const MyDocument = () => {
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/dodgerblue.png"></link>
         <meta name="theme-color" content="white" />
+        <script src="//unpkg.com/string-similarity@4.0.4/umd/string-similarity.min.js"></script>
       </Head>
       <body>
         <Main />

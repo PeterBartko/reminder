@@ -33,7 +33,7 @@ export const template = [
   },
 ]
 
-export const isToday = (date: string | undefined) => {
+export const isToday = (date: string) => {
   if (!date) return false
   return new Date(date).toDateString() === new Date(Date.now()).toDateString()
 }
@@ -52,8 +52,8 @@ const getReminder = (lists: SmartList[], id: number) => {
 const SmartList: React.FC<Props> = ({ id }) => {
   const [show, setShow] = useState<Show>({ new: false, modal: false, completed: false })
   const [listId, setListId] = useState(-1)
-  const [reminders, setReminders] = useState<IReminder[]>()
   const lists = useSelector((state: RootState) => state.lists)
+  const [reminders, setReminders] = useState<IReminder[]>()
   const [listRef] = useAutoAnimate<HTMLUListElement>({ duration: 200 })
   const { color, name } = template[id]
 
@@ -61,7 +61,8 @@ const SmartList: React.FC<Props> = ({ id }) => {
     setReminders(getReminder(lists, id))
   }, [id, lists])
 
-  const handleAdd = (id: number) => {
+  const handleAdd = (id: number, reminders: any) => {
+    setReminders(reminders)
     setShow(s => ({ ...s, modal: true }))
     setListId(id)
   }
@@ -88,7 +89,7 @@ const SmartList: React.FC<Props> = ({ id }) => {
                 />
               ))}
             {show.new && (
-              <button onClick={() => handleAdd(from)}>
+              <button onClick={() => handleAdd(from, reminders)}>
                 <BiPlusCircle color="#aaa" size={25} />
               </button>
             )}
@@ -107,7 +108,7 @@ const SmartList: React.FC<Props> = ({ id }) => {
           />
         ))!
     }
-    return rems?.length == 0 ? <p className={styles.no_rem}>No Reminders</p> : rems
+    return !rems?.length ? <p className={styles.no_rem}>No Reminders</p> : rems
   }
 
   return (
@@ -134,17 +135,16 @@ const SmartList: React.FC<Props> = ({ id }) => {
               )}{' '}
           Completed
         </h2>
-        {/* {id != 2 && ( */}
+
         <button onClick={() => setShow(s => ({ ...s, completed: !s.completed }))} style={{ color }}>
           {show.completed ? 'Hide' : 'Show'}
         </button>
-        {/* )} */}
       </span>
 
       <ul ref={listRef}>{renderReminders()}</ul>
 
       <AnimatePresence>
-        {show.modal && <NewReminder setShow={setShow} listId={listId} />}
+        {show.modal && <NewReminder setShow={setShow} listId={listId} reminders={reminders} />}
       </AnimatePresence>
     </div>
   )

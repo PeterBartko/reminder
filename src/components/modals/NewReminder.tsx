@@ -7,21 +7,32 @@ import { Switch } from '@headlessui/react'
 import { Show } from '../List'
 import { motion } from 'framer-motion'
 
+declare namespace stringSimilarity {
+  function compareTwoStrings(string1: string, string2: string): number
+}
+
 interface Props {
   setShow: Dispatch<SetStateAction<Show>>
+  reminders: Reminder[] | undefined
   listId: number
 }
 
-const NewReminder: React.FC<Props> = ({ setShow, listId }) => {
+const NewReminder: React.FC<Props> = ({ setShow, listId, reminders }) => {
   const [values, setValues] = useState<Reminder>({
     id: Date.now(),
     listId,
     title: '',
+    description: '',
     flag: false,
     completed: false,
+    deadline: {
+      date: '',
+      time: '',
+    },
   })
   const [flag, setFlag] = useState(false)
   const [deadline, setDeadline] = useState(false)
+  const [match, setMatch] = useState(false)
 
   const dispatch = useDispatch()
 
@@ -37,8 +48,21 @@ const NewReminder: React.FC<Props> = ({ setShow, listId }) => {
   }
 
   const addNew = () => {
-    dispatch(addNewReminderToList({ listId, values }))
-    close()
+    if (
+      reminders?.some(
+        r =>
+          (stringSimilarity.compareTwoStrings(r.title, values.title) >= 0.8 ||
+            stringSimilarity.compareTwoStrings(r.description, values.description) >= 0.8) &&
+          r.deadline.date === values.deadline.date &&
+          r.deadline.date !== '' &&
+          r.description !== ''
+      )
+    ) {
+      setMatch(true)
+    } else {
+      dispatch(addNewReminderToList({ listId, values }))
+      close()
+    }
   }
 
   return (
@@ -71,7 +95,7 @@ const NewReminder: React.FC<Props> = ({ setShow, listId }) => {
           />
         </div>
         <div className={styles.inp_wrap}>
-          <label htmlFor="description">Desctiption:</label>
+          <label htmlFor="description">Description:</label>
           <textarea
             id="description"
             onInput={(e: any) => setValues(v => ({ ...v, description: e.target.value }))}
@@ -119,14 +143,12 @@ const NewReminder: React.FC<Props> = ({ setShow, listId }) => {
           <div className={styles.inp_wrap}>
             <input
               type="date"
-              id=""
               onInput={(e: any) =>
                 setValues(v => ({ ...v, deadline: { ...v.deadline!, date: e.target.value } }))
               }
             />
             <input
               type="time"
-              id=""
               onInput={(e: any) =>
                 setValues(v => ({ ...v, deadline: { ...v.deadline!, time: e.target.value } }))
               }
@@ -137,6 +159,7 @@ const NewReminder: React.FC<Props> = ({ setShow, listId }) => {
         <hr color="#eee" />
 
         <span className={styles.span_btns}>
+          {match && <p className={styles.alert}>Pripomienka sa zhoduje s inou!</p>}
           <button className={styles.btn} onClick={close}>
             Cancel
           </button>
